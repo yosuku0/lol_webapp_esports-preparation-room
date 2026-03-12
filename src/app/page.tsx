@@ -30,11 +30,11 @@ export default function Home() {
 
   const handleMockData = () => {
     setPlayers([
-      { gameName: "Perle", tagLine: "2201", role: "top" },
-      { gameName: "ShadowIsles0", tagLine: "JP1", role: "jungle" },
-      { gameName: "Faker", tagLine: "KR1", role: "mid" },
-      { gameName: "Jubilant veil", tagLine: "JP2", role: "adc" },
-      { gameName: "だれでも", tagLine: "1108", role: "support" }
+      { gameName: "SIONJAP", tagLine: "jp 1", role: "top" },
+      { gameName: "MARLTNUM", tagLine: "JP1", role: "jungle" },
+      { gameName: "χion", tagLine: "JP1", role: "mid" },
+      { gameName: "野生のアルファ", tagLine: "アズール", role: "adc" },
+      { gameName: "SuzuRi", tagLine: "JP1", role: "support" }
     ]);
   };
 
