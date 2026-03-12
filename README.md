@@ -19,8 +19,8 @@ League of Legends の対戦相手を AI (Gemini 2.0 Flash) が分析し、戦略
 - **Scraping**: Cheerio (Patch Notes analysis)
 
 ## スクリーンショット
-![Main Form](./public/screenshots/final_analysis.webp)
-*(※解析結果の Hextech デザインテーマ例)*
+![Main Form](./public/screenshots/main_form.png)
+*(※Hextech デザインテーマを適用したメインフォーム)*
 
 ## セットアップ手順
 
