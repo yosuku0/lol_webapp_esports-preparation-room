@@ -6,6 +6,7 @@ import { processTeamProfile } from "@/lib/riot/data-processor";
 import { fetchPatchHtml } from "@/lib/patch/patch-fetcher";
 import { parsePatch } from "@/lib/patch/patch-parser";
 import { generateBriefing } from "@/lib/llm/briefing-generator";
+import { getDataDragonCache } from "@/lib/riot/data-dragon";
 import type { AnalyzeRequest, ErrorEvent } from "@/lib/types/api";
 
 export const runtime = "nodejs"; // cheerioとNode.js API使用のため必須
@@ -111,6 +112,7 @@ export async function POST(req: NextRequest) {
           totalTimeMs: Date.now() - startTime,
           model: process.env.LLM_MODEL || "gemini-2.0-flash",
           parseStatus: patchData.parseStatus,
+          dataDragonVersion: getDataDragonCache().version,
         });
       } catch (error) {
         const message =

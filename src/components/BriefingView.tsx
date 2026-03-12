@@ -13,7 +13,10 @@ interface Props {
 }
 
 export function BriefingView({ data, lang }: Props) {
-  const { briefing, step0Log } = data;
+  const { briefing, step0Log, dataDragonVersion } = data;
+  // Use the Data Dragon version received from the API (e.g. "15.6.1").
+  // Fall back to a recent known version only if the field is missing.
+  const ddVersion = dataDragonVersion ?? "15.1.1";
   const { dataOverview } = briefing;
 
   return (
@@ -41,7 +44,7 @@ export function BriefingView({ data, lang }: Props) {
       
       <BanRecommendationCard 
         recommendations={briefing.banRecommendations} 
-        patchVersion={dataOverview.patchVersion || "14.4.1"} 
+        patchVersion={ddVersion}
         lang={lang}
       />
 
@@ -76,7 +79,7 @@ export function BriefingView({ data, lang }: Props) {
           <PlayerCard 
             key={player.summonerName} 
             player={player} 
-            patchVersion={dataOverview.patchVersion || "14.4.1"} 
+            patchVersion={ddVersion}
             lang={lang}
           />
         ))}

@@ -4,6 +4,7 @@
 export interface BriefingResponse {
   step0Log: Step0Log;
   briefing: Briefing;
+  dataDragonVersion?: string; // Data Dragon CDN version (e.g. "15.6.1"), received from complete event
 }
 
 export interface Step0Log {

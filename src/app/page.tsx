@@ -81,19 +81,23 @@ export default function Home() {
       
       let step0Log: Step0Log | undefined;
       let briefing: Briefing | undefined;
+      let sseBuffer = "";
 
       while (reader) {
         const { done, value } = await reader.read();
         if (done) break;
         
-        const chunk = decoder.decode(value, { stream: true });
-        // SSE parsing
-        const lines = chunk.split("\n\n");
-        for (const line of lines) {
-          if (!line.trim()) continue;
+        sseBuffer += decoder.decode(value, { stream: true });
+
+        // Only process complete SSE events (terminated by \n\n)
+        const events = sseBuffer.split("\n\n");
+        sseBuffer = events.pop() ?? ""; // Keep the last incomplete chunk in the buffer
+
+        for (const event of events) {
+          if (!event.trim()) continue;
           
-          const eventMatch = line.match(/event: (.*)\n/);
-          const dataMatch = line.match(/data: (.*)/);
+          const eventMatch = event.match(/event: (.*)\n/);
+          const dataMatch = event.match(/data: (.*)/);
           
           if (eventMatch && dataMatch) {
             const eventType = eventMatch[1].trim();
@@ -130,7 +134,8 @@ export default function Home() {
                         droppedCandidates: [],
                         warnings: []
                       }, 
-                      briefing 
+                      briefing,
+                      dataDragonVersion: data.dataDragonVersion,
                     });
                   } else {
                     setError("Completed but no briefing data was received.");
@@ -144,6 +149,7 @@ export default function Home() {
           }
         }
       }
+
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An unknown error occurred.");
       setIsLoading(false);
