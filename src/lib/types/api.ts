@@ -8,6 +8,7 @@ export interface AnalyzeRequest {
   }>;
   routingCluster: RoutingCluster;
   patchVersion?: string; // 省略時は最新パッチを自動取得
+  lang?: "en" | "ja"; // LLM output language
 }
 
 export type ProgressStep = "players" | "patch" | "briefing";

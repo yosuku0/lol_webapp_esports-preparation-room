@@ -1,13 +1,15 @@
 import { ShieldAlert } from "lucide-react";
 import type { Briefing } from "@/lib/types/briefing";
 import { ChampionIcon } from "./ChampionIcon";
+import { t, type Lang } from "@/lib/i18n";
 
 interface Props {
   recommendations: Briefing["banRecommendations"];
   patchVersion: string;
+  lang: Lang;
 }
 
-export function BanRecommendationCard({ recommendations, patchVersion }: Props) {
+export function BanRecommendationCard({ recommendations, patchVersion, lang }: Props) {
   if (!recommendations || recommendations.length === 0) return null;
 
   return (
@@ -15,7 +17,7 @@ export function BanRecommendationCard({ recommendations, patchVersion }: Props) 
 
       <h2 className="text-xl font-bold text-hextech-gold mb-5 flex items-center gap-2">
         <ShieldAlert className="w-6 h-6" />
-        Recommended Bans
+        {t[lang].banTitle}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {recommendations.map((rec, i) => (
@@ -26,7 +28,7 @@ export function BanRecommendationCard({ recommendations, patchVersion }: Props) 
               rec.priority === 2 ? 'bg-orange-600 text-white' : 
               'bg-hextech-border text-gray-300'
             }`}>
-              Priority {rec.priority}
+              {t[lang].priority} {rec.priority}
             </div>
 
             <div className="flex items-center gap-4 mb-3">
@@ -34,7 +36,7 @@ export function BanRecommendationCard({ recommendations, patchVersion }: Props) 
               <div>
                 <h3 className="font-bold text-lg text-white">{rec.champion}</h3>
                 <div className="text-xs text-hextech-blue-dark uppercase tracking-wider font-bold">
-                  Confidence: <span className={rec.confidence === 'high' ? 'text-win' : 'text-gray-400'}>{rec.confidence}</span>
+                  {t[lang].confidence}: <span className={rec.confidence === 'high' ? 'text-win' : 'text-gray-400'}>{rec.confidence}</span>
                 </div>
               </div>
             </div>

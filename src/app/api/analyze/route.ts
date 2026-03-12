@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   } catch {
     return Response.json({ message: "Invalid JSON", type: "unknown" }, { status: 400 });
   }
-  const { players, routingCluster, patchVersion } = body;
+  const { players, routingCluster, patchVersion, lang } = body;
 
   const encoder = new TextEncoder();
 
@@ -96,7 +96,8 @@ export async function POST(req: NextRequest) {
         const briefingResponse = await generateBriefing(
           teamProfile,
           patchData,
-          playerRoles
+          playerRoles,
+          lang ?? "ja"
         );
 
         // Step 0 ログを送信

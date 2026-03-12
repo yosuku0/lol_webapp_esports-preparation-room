@@ -35,8 +35,14 @@ const BRIEFING_SCHEMA = `
 }
 `;
 
-export function buildSystemPrompt(): string {
-  return `あなたはLoLの対戦準備アナリストです。
+export function buildSystemPrompt(lang: "en" | "ja" = "ja"): string {
+  const langInstruction = lang === "ja"
+    ? "出力するJSONの全テキストフィールド（summary, reason, description, title等）は必ず日本語で記述してください。"
+    : "All text fields in the output JSON (summary, reason, description, title, etc.) must be written in English.";
+
+  return `${langInstruction}
+
+あなたはLoLの対戦準備アナリストです。
 以下のルールとワークフローに従って分析してください。
 
 === 分析ルール ===
@@ -70,10 +76,11 @@ export async function generateBriefing(
   teamProfile: TeamProfile,
   patchData: PatchData,
   playerRoles: Record<string, string>,
+  lang: "en" | "ja" = "ja",
   onChunk?: (text: string) => void
 ): Promise<BriefingResponse> {
   const llm = createLLMProvider();
-  const systemPrompt = buildSystemPrompt();
+  const systemPrompt = buildSystemPrompt(lang);
   const userPrompt = buildUserPrompt(teamProfile, patchData, playerRoles);
   return llm.generateStructuredBriefing(systemPrompt, userPrompt, onChunk);
 }

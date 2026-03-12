@@ -1,19 +1,21 @@
 import { Lightbulb, AlertTriangle } from "lucide-react";
 import type { Briefing } from "@/lib/types/briefing";
+import { t, type Lang } from "@/lib/i18n";
 
 interface Props {
   opportunities: Briefing["opportunities"];
   warnings: Briefing["warnings"];
+  lang: Lang;
 }
 
-export function OpportunityWarningCard({ opportunities, warnings }: Props) {
+export function OpportunityWarningCard({ opportunities, warnings, lang }: Props) {
   return (
     <div className="grid md:grid-cols-2 gap-6 mb-6">
       {/* Opportunities */}
       <div className="bg-hextech-panel border border-hextech-border rounded-lg p-6 shadow-md shadow-hextech-blue/10">
         <h2 className="text-lg font-bold text-hextech-blue mb-4 flex items-center gap-2">
           <Lightbulb className="w-5 h-5" />
-          Strategic Opportunities
+          {t[lang].opportunities}
         </h2>
         {opportunities?.length > 0 ? (
           <ul className="space-y-3">
@@ -36,7 +38,7 @@ export function OpportunityWarningCard({ opportunities, warnings }: Props) {
       <div className="bg-hextech-panel border border-loss/20 rounded-lg p-6 shadow-md shadow-loss/5">
         <h2 className="text-lg font-bold text-loss mb-4 flex items-center gap-2">
           <AlertTriangle className="w-5 h-5" />
-          Critical Warnings
+          {t[lang].warnings}
         </h2>
         {warnings?.length > 0 ? (
           <ul className="space-y-3">

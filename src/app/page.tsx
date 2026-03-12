@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BriefingView } from "@/components/BriefingView";
 import type { BriefingResponse, Step0Log, Briefing } from "@/lib/types/briefing";
 import { Loader2, Zap } from "lucide-react";
+import { t, type Lang } from "@/lib/i18n";
 
 export default function Home() {
   const [players, setPlayers] = useState([
@@ -15,12 +16,23 @@ export default function Home() {
   ]);
   const [routingCluster, setRoutingCluster] = useState("asia");
   const [patchVersion, setPatchVersion] = useState("");
-  
+  const [lang, setLang] = useState<Lang>("ja");
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progressMsg, setProgressMsg] = useState("");
   
   const [briefingData, setBriefingData] = useState<BriefingResponse | null>(null);
+
+  // Language toggle button component
+  const LangToggle = () => (
+    <button
+      onClick={() => setLang(l => l === "en" ? "ja" : "en")}
+      className="text-xs font-bold px-3 py-1 border border-hextech-border rounded text-hextech-gold hover:border-hextech-gold transition"
+    >
+      {lang === "en" ? "🇯🇵 日本語" : "🇬🇧 English"}
+    </button>
+  );
 
   const handlePlayerChange = (index: number, field: string, value: string) => {
     const newPlayers = [...players];
@@ -45,7 +57,7 @@ export default function Home() {
     setProgressMsg("Initializing analysis...");
     setBriefingData(null);
 
-    // 簡易バリデーション (少なくとも1人は必要、ただし本番は5人揃えるなどの条件もありうる)
+    // At least one player is required
     const validPlayers = players.filter(p => p.gameName.trim() !== "");
     if (validPlayers.length === 0) {
       setError("At least one player must be provided.");
@@ -57,7 +69,7 @@ export default function Home() {
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ players: validPlayers, routingCluster, patchVersion: patchVersion || undefined }),
+        body: JSON.stringify({ players: validPlayers, routingCluster, patchVersion: patchVersion || undefined, lang }),
       });
 
       if (!response.ok) {
@@ -104,8 +116,6 @@ export default function Home() {
                   return;
                 case "complete":
                   if (briefing) {
-                    // step0Log might be undefined if skipping Phase 0, but the type expects it.
-                    // Providing a minimal valid Step0Log as fallback or ensuring it exists.
                     setBriefingData({ 
                       step0Log: step0Log || { 
                         patchVersion: "", 
@@ -149,14 +159,17 @@ export default function Home() {
             <Zap className="w-5 h-5 text-hextech-blue" />
             eSports Prep Room
           </div>
-          <button 
-            onClick={() => setBriefingData(null)}
-            className="px-4 py-2 text-sm bg-hextech-border hover:bg-hextech-border/80 text-white rounded transition"
-          >
-            New Analysis
-          </button>
+          <div className="flex items-center gap-3">
+            <LangToggle />
+            <button 
+              onClick={() => setBriefingData(null)}
+              className="px-4 py-2 text-sm bg-hextech-border hover:bg-hextech-border/80 text-white rounded transition"
+            >
+              {t[lang].newAnalysis}
+            </button>
+          </div>
         </div>
-        <BriefingView data={briefingData} />
+        <BriefingView data={briefingData} lang={lang} />
       </div>
     );
   }
@@ -167,15 +180,20 @@ export default function Home() {
         {/* Glow effect */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-hextech-blue/10 blur-3xl rounded-full pointer-events-none"></div>
         
+        {/* Language toggle - top right */}
+        <div className="absolute top-6 right-6 z-10">
+          <LangToggle />
+        </div>
+
         <div className="mb-8 text-center relative z-10">
-          <h1 className="text-4xl font-bold text-white mb-2 tracking-widest uppercase">Opponent Intel</h1>
-          <p className="text-hextech-gold">Input player details for comprehensive AI-driven analysis</p>
+          <h1 className="text-4xl font-bold text-white mb-2 tracking-widest uppercase">{t[lang].title}</h1>
+          <p className="text-hextech-gold">{t[lang].subtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="relative z-10 space-y-6">
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-xs font-bold text-hextech-blue uppercase mb-2">Region Cluster</label>
+              <label className="block text-xs font-bold text-hextech-blue uppercase mb-2">{t[lang].regionLabel}</label>
               <select 
                 value={routingCluster} 
                 onChange={e => setRoutingCluster(e.target.value)}
@@ -188,10 +206,10 @@ export default function Home() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold text-hextech-blue uppercase mb-2">Target Patch (Optional)</label>
+              <label className="block text-xs font-bold text-hextech-blue uppercase mb-2">{t[lang].patchLabel}</label>
               <input 
                 type="text" 
-                placeholder="e.g., 14.4" 
+                placeholder={t[lang].patchPlaceholder}
                 value={patchVersion}
                 onChange={e => setPatchVersion(e.target.value)}
                 className="w-full bg-hextech-card border border-hextech-border p-3 rounded text-white focus:border-hextech-blue outline-none transition placeholder-gray-600"
@@ -201,13 +219,13 @@ export default function Home() {
 
           <div className="space-y-4">
             <div className="flex justify-between items-center mb-2">
-              <label className="text-xs font-bold text-hextech-blue uppercase">Player Roster</label>
+              <label className="text-xs font-bold text-hextech-blue uppercase">{t[lang].rosterLabel}</label>
               <button 
                 type="button" 
                 onClick={handleMockData}
                 className="text-xs font-bold text-hextech-gold hover:text-white transition"
               >
-                Auto-fill Test Data
+                {t[lang].autoFill}
               </button>
             </div>
             
@@ -222,7 +240,7 @@ export default function Home() {
                   value={player.gameName}
                   onChange={e => handlePlayerChange(index, 'gameName', e.target.value)}
                   className="flex-1 bg-hextech-card border border-hextech-border p-3 rounded text-white focus:border-hextech-blue outline-none transition placeholder-gray-600"
-                  required={index === 0} // Requires at least one 
+                  required={index === 0}
                 />
                 <div className="text-hextech-border font-bold">#</div>
                 <input 
@@ -251,10 +269,10 @@ export default function Home() {
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                {progressMsg || "Analyzing..."}
+                {progressMsg || t[lang].analyzing}
               </>
             ) : (
-              "Generate Briefing"
+              t[lang].generateBtn
             )}
           </button>
         </form>

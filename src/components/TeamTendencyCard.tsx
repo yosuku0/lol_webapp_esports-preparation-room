@@ -1,11 +1,13 @@
 import { Target, Clock, BarChart3 } from "lucide-react";
 import type { Briefing } from "@/lib/types/briefing";
+import { t, type Lang } from "@/lib/i18n";
 
 interface Props {
   tendency: Briefing["teamTendency"];
+  lang: Lang;
 }
 
-export function TeamTendencyCard({ tendency }: Props) {
+export function TeamTendencyCard({ tendency, lang }: Props) {
   if (!tendency) return null;
 
   const WinRateBar = ({ label, rate }: { label: string, rate: number }) => (
@@ -27,7 +29,7 @@ export function TeamTendencyCard({ tendency }: Props) {
     <div className="bg-hextech-panel border border-hextech-border rounded-lg p-6 shadow-md h-full">
       <h2 className="text-lg font-bold text-hextech-gold mb-5 flex items-center gap-2">
         <Target className="w-5 h-5" />
-        Team Tendencies
+        {t[lang].teamTendency}
       </h2>
       
       <div className="grid grid-cols-2 gap-4 mb-6">

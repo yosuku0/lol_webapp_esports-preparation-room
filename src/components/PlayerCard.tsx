@@ -1,13 +1,15 @@
 import { Activity, Crosshair } from "lucide-react";
 import type { Briefing } from "@/lib/types/briefing";
 import { ChampionIcon } from "./ChampionIcon";
+import { t, type Lang } from "@/lib/i18n";
 
 interface Props {
   player: Briefing["playerAnalysis"][number];
   patchVersion: string;
+  lang: Lang;
 }
 
-export function PlayerCard({ player, patchVersion }: Props) {
+export function PlayerCard({ player, patchVersion, lang }: Props) {
   const getReliabilityColor = (rel: string) => {
     switch (rel) {
       case "high": return "text-win";
@@ -30,7 +32,7 @@ export function PlayerCard({ player, patchVersion }: Props) {
         </div>
         
         <div className="text-right">
-          <div className="text-xs text-gray-400 uppercase">Reliability</div>
+          <div className="text-xs text-gray-400 uppercase">{t[lang].reliability}</div>
           <div className={`font-bold capitalize ${getReliabilityColor(player.reliability)}`}>
             {player.reliability}
           </div>
@@ -48,7 +50,7 @@ export function PlayerCard({ player, patchVersion }: Props) {
         <div className="flex items-start gap-3 border-t border-hextech-border/30 pt-3">
           <Crosshair className="w-4 h-4 text-gray-400 mt-0.5" />
           <div className="flex-1">
-            <span className="text-gray-500 text-[10px] uppercase font-bold block leading-tight">Patch Impact</span>
+            <span className="text-gray-500 text-[10px] uppercase font-bold block leading-tight">{t[lang].patchImpact}</span>
             <span className="text-gray-200">{player.patchImpact || "Neutral"}</span>
           </div>
         </div>

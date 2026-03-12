@@ -1,7 +1,13 @@
 import { ChevronDown, FileTerminal, AlertTriangle } from "lucide-react";
 import type { Step0Log } from "@/lib/types/briefing";
+import { t, type Lang } from "@/lib/i18n";
 
-export function Step0LogView({ log }: { log: Step0Log }) {
+interface Props {
+  log: Step0Log;
+  lang: Lang;
+}
+
+export function Step0LogView({ log, lang }: Props) {
   if (!log) return null;
 
   return (
@@ -9,7 +15,7 @@ export function Step0LogView({ log }: { log: Step0Log }) {
       <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-gray-400 hover:text-hextech-gold transition-colors list-none">
         <div className="flex items-center gap-2 text-sm uppercase tracking-widest">
           <FileTerminal className="w-4 h-4" />
-          <span>Phase 0: Reasoning Log</span>
+          <span>{t[lang].step0Title}</span>
         </div>
         <ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />
       </summary>
