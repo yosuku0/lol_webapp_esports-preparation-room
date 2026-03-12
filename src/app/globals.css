@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* League of Legends Hextech Theme Variables */
+@theme inline {
+  --color-hextech-gold: #c8aa6e;
+  --color-hextech-gold-light: #f0e6d2;
+  --color-hextech-gold-dark: #785a28;
+  
+  --color-hextech-blue: #0ac8b9;
+  --color-hextech-blue-dark: #005a82;
+
+  --color-hextech-bg: #091428;
+  --color-hextech-panel: #111a2e;
+  --color-hextech-card: #0a0a0c;
+  
+  --color-hextech-border: #1e282d;
+  --color-hextech-border-gold: #785a28;
+
+  --color-win: #10b981; /* emerald-500 */
+  --color-loss: #ef4444; /* red-500 */
+  
+  --color-background: var(--color-hextech-bg);
+  --color-foreground: var(--color-hextech-gold-light);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: "Spiegel", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar for a more premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-hextech-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-hextech-border-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hextech-gold);
+}
